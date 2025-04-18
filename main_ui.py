@@ -254,7 +254,9 @@ class Chart(tk.Frame):
 
 
 if __name__ == "__main__":
-    data = pd.read_csv("db/data_set.csv")
+    csv_path = os.path.join(os.path.dirname(__file__), "db", "data_set.csv")
+    data = pd.read_csv(csv_path)
+
     LARGE_FONT = ("Arial", 25)
 
     awt_arr = []
