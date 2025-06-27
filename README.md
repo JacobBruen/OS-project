@@ -1,10 +1,7 @@
-# CPU scheduling algorithms simulator
+# CPU Scheduling Algorithms Simulator (Operating Systems Final Project)
 ## Introduction
 
-The CPU scheduling algorithms simulator is a project that simulates different CPU scheduling algorithms using Python.
-The project includes a Graphical User Interface (GUI) that allows the user to select the algorithm, view the results on
-the screen, and visualize the results in a chart. The project uses four different algorithms: First Come, First Served (
-FCFS), Shortest Job First (SJF), Round Robin (RR), and Priority.
+For my Operating Systems final project, I selected and completed a project sourced from Papers with Code. The simulator, developed in Python, features a Graphical User Interface (GUI) that allows users to choose among four core CPU scheduling algorithms: First Come, First Served (FCFS), Shortest Job First (SJF), Round Robin (RR), and Priority Scheduling. The simulator displays results both on-screen and through visual charts, providing clear insights into each algorithm’s performance and behavior.
 
 ## Directory Structure
 
