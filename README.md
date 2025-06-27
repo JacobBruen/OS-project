@@ -30,14 +30,14 @@ the screen.
 
 ### `main_ui.py`
 
-This file contains the implementation of the GUI interface using the tkinter library. The user can select the algorithm
-to simulate from the buttons on the home page. The GUI then displays the results on the screen, and the user can
+This file contains the implementation of the GUI using the tkinter library. The user can select the algorithm
+to simulate using the buttons on the home page. The GUI then displays the results on the screen, and the user can
 visualize the results in a chart.
 
 ### `process_generator.py`
 
 This file contains a function to generate a CSV file containing the process data for the simulation. The user can specify
-the number of processes to generate, and the function will generate random values for the arrival time, priority, and
+the specific number of processes to generate, and the function will generate random values for the arrival time, priority, and
 burst time of each process.
 
 ## Algorithms
@@ -46,12 +46,12 @@ burst time of each process.
 
 The FCFS algorithm is a non-preemptive algorithm where the processes are executed in the order they arrive in the ready
 queue. The process with the lowest arrival time is executed first, and the CPU is not released until the process
-completes. This algorithm is simple and easy to implement, but it suffers from the problem of convoy effect, where a
+completes. This algorithm is simple and easy to implement, but it suffers from the problem of the convoy effect, where a
 long process can hold the CPU, causing other short processes to wait.
 
 ### Shortest Job First (SJF)
 
-The SJF algorithm is a non-preemptive algorithm where the processes are executed in order of their burst time. The
+The SJF algorithm is a non-preemptive algorithm that executes the processes in order of their burst time. The
 process with the shortest burst time is executed first, and the CPU is not released until the process completes. This
 algorithm reduces the waiting time and turnaround time of the processes, but it suffers from the problem of starvation,
 where a long process can keep waiting for the CPU if shorter processes keep arriving.
@@ -74,7 +74,7 @@ arriving.
 ## GUI Interface
 
 The GUI interface is implemented in the `main_ui.py` file using the tkinter library. The interface has two main pages:
-the home page and the results page.
+The home page and the results page.
 
 ### Home Page
 
