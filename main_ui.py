@@ -1,11 +1,14 @@
+from pathlib import Path
+
+# Define the cleaned and modernized main_ui.py code with ttkbootstrap styling
 import os
 import sys
-import tkinter as tk
-from tkinter import ttk
-from tkinter.ttk import Style
-
 import pandas as pd
 import matplotlib.pyplot as plt
+from ttkbootstrap import Style, Window
+from ttkbootstrap.constants import *
+
+import ttkbootstrap as ttk
 
 sys.path.append(os.path.relpath("First-Come-First-Serve-scheduling"))
 sys.path.append(os.path.relpath("Priority-Scheduling"))
@@ -19,104 +22,72 @@ from SJF_p import simulate_sjf_p_algorithm
 from priority_np import simulate_priority_np_algorithm
 from priority_p import simulate_priority_p_algorithm
 
+LARGE_FONT = ("Arial", 25)
+awt_arr = []
+att_arr = []
+art_arr = []
 
-class tkinterApp(tk.Tk):
-
-    # __init__ function for class tkinterApp
+class tkinterApp(Window):
     def __init__(self, *args, **kwargs):
-        # __init__ function for class Tk
-        tk.Tk.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-        style = Style()
-        style.configure('TButton',
-                        background='blue',
-                        foreground='white',
-                        font=('Arial', 20, 'bold'),
-                        borderwidth='4')
+        style = Style("cyborg")
 
-        style.configure('TLabel',
-                        background='#081547',
-                        foreground='white',
-                        font=('Arial', 20, 'bold'),
-                        borderwidth='4')
-
-        style.map('TButton',
-                  foreground=[('active', '!disabled', 'black')],
-                  background=[('active', 'yellow')])
-        # creating a container
-        container = tk.Frame(self)
+        container = ttk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
-
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        # initializing frames to an empty array
         self.frames = {}
 
-        # iterating through a tuple consisting
-        # of the different page layouts
         for F in (StartPage, FCFS, SJF_np, SJF_p, RR, PriorityNP, PriorityP, Chart):
             frame = F(container, self)
-
-            # initializing frame of that object from
-            # startpage, page1, page2 respectively with
-            # for loop
             self.frames[F] = frame
-
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame(StartPage)
 
-    # to display the current frame passed as
-    # parameter
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
 
 
-class StartPage(tk.Frame):
+class StartPage(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
+        super().__init__(parent)
+        self.config(style="secondary.TFrame")
 
-        label = ttk.Label(self, text="CPU Scheduling algorithms simulator", font=LARGE_FONT)
-        label.place(x=0, y=0)
+        title = ttk.Label(self, text="🧠 CPU Scheduling Simulator", font=("Helvetica", 28, "bold"), bootstyle="primary")
+        title.pack(pady=30)
 
-        button1 = ttk.Button(self, text="FCFS", command=lambda: controller.show_frame(FCFS))
-        button1.place(x=50, y=100)
+        buttons = [
+            ("FCFS", FCFS),
+            ("SJF NP", SJF_np),
+            ("SJF P", SJF_p),
+            ("RR", RR),
+            ("Priority NP", PriorityNP),
+            ("Priority P", PriorityP),
+            ("Chart", Chart)
+        ]
 
-        button2 = ttk.Button(self, text="SJF NP", command=lambda: controller.show_frame(SJF_np))
-        button2.place(x=300, y=100)
-
-        button3 = ttk.Button(self, text="SJF P", command=lambda: controller.show_frame(SJF_p))
-        button3.place(x=50, y=200)
-
-        button4 = ttk.Button(self, text="RR", command=lambda: controller.show_frame(RR))
-        button4.place(x=300, y=200)
-
-        button5 = ttk.Button(self, text="Priority NP", command=lambda: controller.show_frame(PriorityNP))
-        button5.place(x=50, y=300)
-
-        button6 = ttk.Button(self, text="Priority P", command=lambda: controller.show_frame(PriorityP))
-        button6.place(x=300, y=300)
-
-        button7 = ttk.Button(self, text="Chart", command=lambda: controller.show_frame(Chart))
-        button7.place(x=180, y=400)
+        for text, frame in buttons:
+            b = ttk.Button(self, text=text, bootstyle="info", width=20, command=lambda f=frame: controller.show_frame(f))
+            b.pack(pady=10)
 
 
 def print_result(root, result):
-    label = ttk.Label(root, text=f"Number of processes = {result['n']}", font=LARGE_FONT, foreground='yellow')
-    label.place(x=20, y=100)
-    label = ttk.Label(root, text=f"Throughput = {result['throughput']}", font=LARGE_FONT, foreground='yellow')
-    label.place(x=20, y=150)
-    label = ttk.Label(root, text=f"CPU utilization = {result['cpu_util']}", font=LARGE_FONT, foreground='yellow')
-    label.place(x=20, y=200)
-    label = ttk.Label(root, text=f"Average waiting time = {result['awt']}", font=LARGE_FONT, foreground='yellow')
-    label.place(x=20, y=250)
-    label = ttk.Label(root, text=f"Average turn around time = {result['att']}", font=LARGE_FONT, foreground='yellow')
-    label.place(x=20, y=300)
-    label = ttk.Label(root, text=f"Average response time = {result['art']}", font=LARGE_FONT, foreground='yellow')
-    label.place(x=20, y=350)
+    y = 100
+    for label_text in [
+        f"Number of processes = {result['n']}",
+        f"Throughput = {result['throughput']}",
+        f"CPU utilization = {result['cpu_util']}",
+        f"Average waiting time = {result['awt']}",
+        f"Average turn around time = {result['att']}",
+        f"Average response time = {result['art']}"
+    ]:
+        label = ttk.Label(root, text=label_text, font=LARGE_FONT, bootstyle="warning")
+        label.place(x=20, y=y)
+        y += 50
 
 
 def set_data_for_chart(result):
@@ -125,108 +96,77 @@ def set_data_for_chart(result):
     art_arr.append(float(result['art']))
 
 
-class FCFS(tk.Frame):
-
+class FCFS(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="First Come First Served algorithm:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="First Come First Served algorithm:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
         result = simulate_fcfs_algorithm(data)
         set_data_for_chart(result)
         print_result(self, result)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=20)
 
 
-class SJF_np(tk.Frame):
-
+class SJF_np(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="SJF non-preemptive algorithm:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="SJF non-preemptive algorithm:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
         result = simulate_sjf_np_algorithm(data)
         set_data_for_chart(result)
         print_result(self, result)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=20)
 
 
-class SJF_p(tk.Frame):
-
+class SJF_p(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="SJF preemptive algorithm:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="SJF preemptive algorithm:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
         result = simulate_sjf_p_algorithm(data)
         set_data_for_chart(result)
         print_result(self, result)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=20)
 
 
-class RR(tk.Frame):
-
+class RR(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="Round-Robin algorithm:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="Round-Robin algorithm:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
         result = simulate_rr_algorithm(data, 1)
         set_data_for_chart(result)
         print_result(self, result)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=20)
 
 
-class PriorityNP(tk.Frame):
-
+class PriorityNP(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="Priority non-preemptive algorithm:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="Priority non-preemptive algorithm:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
         result = simulate_priority_np_algorithm(data)
         set_data_for_chart(result)
         print_result(self, result)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=20)
 
 
-class PriorityP(tk.Frame):
-
+class PriorityP(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="Priority preemptive algorithm:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
-
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="Priority preemptive algorithm:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
         result = simulate_priority_p_algorithm(data)
         set_data_for_chart(result)
         print_result(self, result)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=20)
 
 
-class Chart(tk.Frame):
+class Chart(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.config(bg='#081547')
-        label = ttk.Label(self, text="Chart:", font=LARGE_FONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
+        super().__init__(parent)
+        self.config(style="dark.TFrame")
+        ttk.Label(self, text="Chart:", font=LARGE_FONT, bootstyle="info").pack(pady=20)
 
         df = pd.DataFrame(
             {
@@ -236,35 +176,33 @@ class Chart(tk.Frame):
             },
             index=['fcfs', 'sjf_np', 'sjf_p', 'rr', 'priority_np', 'priority_p']
         )
-        print(df)
 
         def bar_plot():
             df.plot.bar(rot=0)
-            plt.title('scheduling algorithms chart')
-            plt.xlabel('algorithms')
-            plt.ylabel('time(second)')
+            plt.title('Scheduling Algorithms Chart')
+            plt.xlabel('Algorithms')
+            plt.ylabel('Time (seconds)')
             plt.grid()
             plt.show()
 
-        button = ttk.Button(self, text="show chart", command=bar_plot)
-        button.place(x=190, y=240)
-
-        button1 = ttk.Button(self, text="Back", command=lambda: controller.show_frame(StartPage))
-        button1.place(x=20, y=450)
+        ttk.Button(self, text="Show Chart", bootstyle="success", command=bar_plot).pack(pady=10)
+        ttk.Button(self, text="Back", bootstyle="danger", command=lambda: controller.show_frame(StartPage)).pack(pady=10)
 
 
 if __name__ == "__main__":
     csv_path = os.path.join(os.path.dirname(__file__), "db", "data_set.csv")
     data = pd.read_csv(csv_path)
 
-    LARGE_FONT = ("Arial", 25)
-
-    awt_arr = []
-    att_arr = []
-    art_arr = []
-
     app = tkinterApp()
     app.wm_geometry("600x500")
-    app.title('CPU Scheduling Algorithms Simulator')
+    app.title("CPU Scheduling Algorithms Simulator")
     app.resizable(False, False)
     app.mainloop()
+
+
+# Save the cleaned-up UI code to main_ui_refactored.py
+output_path = Path("/mnt/data/main_ui.py")
+output_path.write_text(main_ui_code)
+
+output_path.name
+
