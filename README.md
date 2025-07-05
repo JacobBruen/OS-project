@@ -2,18 +2,18 @@
 ## Introduction
 
 For our Operating Systems final project, my team and I developed a CPU Scheduling Simulator in Python, inspired by a concept sourced from Papers with Code. The project simulates four core scheduling algorithms:
-First Come, First Served (FCFS)
-Shortest Job First (SJF) (both preemptive and non-preemptive)
-Round Robin (RR)
-Priority Scheduling (preemptive and non-preemptive)
+First Come, First Served (FCFS),
+Shortest Job First (SJF) (both preemptive and non-preemptive),
+Round Robin (RR) and
+Priority Scheduling (preemptive and non-preemptive).
 
 The simulator features a modern GUI built with ttkbootstrap, allowing users to interactively select an algorithm and visualize performance results.
 Results are presented on-screen alongside real-time performance charts, highlighting key metrics such as:
-Average waiting time
-Average turnaround time
-Average response time
-CPU utilization
-Throughput
+Average waiting time,
+Average turnaround time,
+Average response time,
+CPU utilization and
+Throughput.
 
 This project strengthened our understanding of scheduling concepts and required us to apply Python, data structures (PriorityQueue), pandas, and matplotlib in a practical simulation. It also emphasized teamwork, modular code design, and user interface development.
 ## Directory Structure
